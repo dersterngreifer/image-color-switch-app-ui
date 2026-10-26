@@ -349,17 +349,20 @@ class _Palette extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return SizedBox(
-      height: 80,
+      height: 88,
       child: ListView.separated(
+        clipBehavior: Clip.none,
         scrollDirection: Axis.horizontal,
-        padding: const EdgeInsets.symmetric(horizontal: 24),
+        padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 8),
         itemCount: themeItems.length,
-        separatorBuilder: (_, __) => const SizedBox(width: 10),
+        separatorBuilder: (_, __) => const SizedBox(width: 14),
         itemBuilder: (context, index) {
-          return _ColorChip(
+          return Center(
+            child: _ColorChip(
             item: themeItems[index],
             isSelected: index == selectedIndex,
             onTap: () => onSelect(index),
+            ),
           );
         },
       ),
@@ -387,9 +390,18 @@ class _ColorChip extends StatelessWidget {
         : Colors.white;
 
     return GestureDetector(
-      onTap: onTap,
+      onTap: () {
+        onTap();
+        Scrollable.ensureVisible(
+          context,
+          alignment: 0.5,
+          duration: const Duration(milliseconds: 350),
+          curve: Curves.easeOutCubic,
+        );
+      },
+      behavior: HitTestBehavior.opaque,
       child: AnimatedScale(
-        scale: isSelected ? 1.18 : 1.0,
+        scale: isSelected ? 1.14 : 1.0,
         duration: const Duration(milliseconds: 280),
         curve: Curves.easeOutBack,
         child: AnimatedContainer(
